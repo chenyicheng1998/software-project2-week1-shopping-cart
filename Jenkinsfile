@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Docker Hub credentials stored in Jenkins credentials manager
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        IMAGE_NAME = "YOUR_DOCKERHUB_USERNAME/shopping-cart"
+        IMAGE_NAME = "chenyicheng1998/shopping-cart"
         IMAGE_TAG  = "latest"
     }
 
