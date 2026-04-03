@@ -3,6 +3,7 @@ package com.spring;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -53,6 +54,25 @@ public class ShoppingCartController {
 
     @FXML
     public void initialize() {
+        // Ensure CJK glyphs are available in language dropdown items even before selecting Japanese.
+        languageCombo.setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+        languageCombo.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(LocaleOption item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.toString());
+                setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+            }
+        });
+        languageCombo.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(LocaleOption item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.toString());
+                setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+            }
+        });
+
         languageCombo.setItems(FXCollections.observableArrayList(
                 new LocaleOption("English", "en_US"),
                 new LocaleOption("Suomi", "fi_FI"),
