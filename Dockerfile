@@ -9,6 +9,18 @@ RUN mvn clean package -DskipTests
 FROM maven:3.9-eclipse-temurin-17
 WORKDIR /app
 
+# Install Linux GUI runtime libraries required by JavaFX (X11/GTK/OpenGL)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    libgtk-3-0 \
+    libgl1 \
+    libasound2 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy project files needed for GUI run
 COPY --from=build /app/pom.xml ./pom.xml
 COPY --from=build /app/src ./src
