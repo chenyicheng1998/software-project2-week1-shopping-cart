@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxi6 \
     libgtk-3-0 \
     libgl1 \
-    libasound2 \
+    libasound2t64 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files needed for GUI run
@@ -31,6 +31,5 @@ ENV LANG=en_US.UTF-8
 ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
 ENV DB_URL="jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization?useSsl=false&restrictedAuth=mysql_native_password"
 ENV DB_USER=root
-ENV DB_PASSWORD=root
 
 ENTRYPOINT ["mvn", "-q", "javafx:run"]
