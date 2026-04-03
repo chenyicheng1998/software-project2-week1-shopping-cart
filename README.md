@@ -1,4 +1,4 @@
-# Shopping Cart Localization Project (SEP2 Week 2 + OTP2 Week 3)
+# Shopping Cart Localization Project
 
 ## Implemented Features
 
@@ -31,7 +31,7 @@
 - MariaDB/MySQL
 - JUnit 5 + JaCoCo
 
-## Quick Start (Teacher Guide)
+## Quick Start
 
 ### 1) Prerequisites
 
@@ -42,7 +42,7 @@
 ### 2) Clone and open project
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/chenyicheng1998/software-project2-week1-shopping-cart.git
 cd shopping-cart
 ```
 
