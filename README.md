@@ -124,10 +124,16 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ## Docker
 
-Build image:
+Pull image from Docker Hub:
 
 ```bash
-docker build -t <dockerhub-user>/shopping-cart:latest .
+docker pull chenyicheng1998/shopping-cart:latest
+```
+
+Or build locally:
+
+```bash
+docker build -t chenyicheng1998/shopping-cart:latest .
 ```
 
 Run image (GUI mode with X11 forwarding):
@@ -142,7 +148,7 @@ docker run -it --rm `
   -e DB_URL="jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization?useSsl=false&restrictedAuth=mysql_native_password" `
   -e DB_USER=root `
   -e DB_PASSWORD=your_password `
-  <dockerhub-user>/shopping-cart:latest
+  chenyicheng1998/shopping-cart:latest
 ```
 
 ## Jenkins Pipeline
