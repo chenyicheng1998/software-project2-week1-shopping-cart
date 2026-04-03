@@ -130,10 +130,19 @@ Build image:
 docker build -t <dockerhub-user>/shopping-cart:latest .
 ```
 
-Run image:
+Run image (GUI mode with X11 forwarding):
 
-```bash
-docker run --rm -e DB_URL=jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization -e DB_USER=root -e DB_PASSWORD=your_password <dockerhub-user>/shopping-cart:latest
+- Start Xming first (recommended: disable access control).
+
+Windows PowerShell:
+
+```powershell
+docker run -it --rm `
+  -e DISPLAY=host.docker.internal:0.0 `
+  -e DB_URL="jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization?useSsl=false&restrictedAuth=mysql_native_password" `
+  -e DB_USER=root `
+  -e DB_PASSWORD=your_password `
+  <dockerhub-user>/shopping-cart:latest
 ```
 
 ## Jenkins Pipeline

@@ -5,19 +5,20 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the application using a lightweight JRE image
-FROM eclipse-temurin:17-jre
+# Stage 2: Runtime image for JavaFX GUI mode
+FROM maven:3.9-eclipse-temurin-17
 WORKDIR /app
 
-# Copy the built JAR from the build stage
-COPY --from=build /app/target/shopping-cart.jar app.jar
+# Copy project files needed for GUI run
+COPY --from=build /app/pom.xml ./pom.xml
+COPY --from=build /app/src ./src
+COPY --from=build /app/target ./target
 
-# Set UTF-8 environment variables to support all language outputs
+# UTF-8 + database defaults
 ENV LANG=en_US.UTF-8
 ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
-ENV DB_URL=jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization
+ENV DB_URL="jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization?useSsl=false&restrictedAuth=mysql_native_password"
 ENV DB_USER=root
 ENV DB_PASSWORD=root
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["mvn", "-q", "javafx:run"]
