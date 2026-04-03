@@ -1,6 +1,7 @@
 package com.spring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -8,8 +9,37 @@ import java.util.List;
  */
 public class ShoppingCart {
 
-    // List to store the cost of each item added to the cart
-    private List<Double> itemCosts = new ArrayList<>();
+    private final List<CartItem> items = new ArrayList<>();
+
+    public static class CartItem {
+        private final int itemNumber;
+        private final double price;
+        private final int quantity;
+        private final double subtotal;
+
+        public CartItem(int itemNumber, double price, int quantity, double subtotal) {
+            this.itemNumber = itemNumber;
+            this.price = price;
+            this.quantity = quantity;
+            this.subtotal = subtotal;
+        }
+
+        public int getItemNumber() {
+            return itemNumber;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public double getSubtotal() {
+            return subtotal;
+        }
+    }
 
     /**
      * Calculates the cost of a single item (price multiplied by quantity).
@@ -33,8 +63,9 @@ public class ShoppingCart {
      * @param quantity the number of units
      */
     public void addItem(double price, int quantity) {
-        double cost = calculateItemCost(price, quantity);
-        itemCosts.add(cost);
+        double subtotal = calculateItemCost(price, quantity);
+        int itemNumber = items.size() + 1;
+        items.add(new CartItem(itemNumber, price, quantity, subtotal));
     }
 
     /**
@@ -44,8 +75,8 @@ public class ShoppingCart {
      */
     public double calculateTotalCost() {
         double total = 0;
-        for (double cost : itemCosts) {
-            total += cost;
+        for (CartItem item : items) {
+            total += item.getSubtotal();
         }
         return total;
     }
@@ -54,7 +85,7 @@ public class ShoppingCart {
      * Clears all items from the shopping cart.
      */
     public void clear() {
-        itemCosts.clear();
+        items.clear();
     }
 
     /**
@@ -63,6 +94,14 @@ public class ShoppingCart {
      * @return list of item costs
      */
     public List<Double> getItemCosts() {
-        return itemCosts;
+        List<Double> costs = new ArrayList<>();
+        for (CartItem item : items) {
+            costs.add(item.getSubtotal());
+        }
+        return costs;
+    }
+
+    public List<CartItem> getItems() {
+        return Collections.unmodifiableList(items);
     }
 }

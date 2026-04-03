@@ -122,6 +122,13 @@ public class ShoppingCartTest {
     }
 
     @Test
+    public void testGetLocale_arabic() {
+        Locale locale = Main.getLocale(5);
+        assertEquals("ar", locale.getLanguage());
+        assertEquals("AR", locale.getCountry());
+    }
+
+    @Test
     public void testGetLocale_invalidChoiceDefaultsToEnglish() {
         // Any unrecognized choice should fall back to English
         Locale locale = Main.getLocale(99);

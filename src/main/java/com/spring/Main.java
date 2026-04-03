@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * Main class for the localized shopping cart console application.
- * Supports English, Finnish, Swedish, and Japanese based on user selection.
+ * Supports English, Finnish, Swedish, Japanese, and Arabic based on user selection.
  */
 public class Main {
 
@@ -20,12 +20,13 @@ public class Main {
         ShoppingCart cart = new ShoppingCart();
 
         // Display language selection menu (always in a universal format)
-        System.out.println("Select language / Valitse kieli / Valj sprak / Gengo wo sentaku:");
+        System.out.println("Select language / Valitse kieli / Valj sprak / Gengo wo sentaku / Ikhtar allugha:");
         System.out.println("1. English");
         System.out.println("2. Finnish (Suomi)");
         System.out.println("3. Swedish (Svenska)");
         System.out.println("4. Japanese (Nihongo)");
-        System.out.print("Enter choice (1-4): ");
+        System.out.println("5. Arabic (العربية)");
+        System.out.print("Enter choice (1-5): ");
 
         int langChoice = scanner.nextInt();
 
@@ -61,7 +62,7 @@ public class Main {
     /**
      * Returns the appropriate Locale based on the user's menu selection.
      *
-     * @param choice the number entered by the user (1-4)
+     * @param choice the number entered by the user (1-5)
      * @return the corresponding Locale object
      */
     public static Locale getLocale(int choice) {
@@ -80,6 +81,10 @@ public class Main {
             case 4:
                 language = "ja";
                 country = "JP";
+                break;
+            case 5:
+                language = "ar";
+                country = "AR";
                 break;
             default:
                 language = "en";

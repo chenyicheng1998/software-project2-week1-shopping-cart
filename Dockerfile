@@ -15,6 +15,9 @@ COPY --from=build /app/target/shopping-cart.jar app.jar
 # Set UTF-8 environment variables to support all language outputs
 ENV LANG=en_US.UTF-8
 ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
+ENV DB_URL=jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization
+ENV DB_USER=root
+ENV DB_PASSWORD=root
 
 # Run the JAR file
 ENTRYPOINT ["java", "-jar", "app.jar"]

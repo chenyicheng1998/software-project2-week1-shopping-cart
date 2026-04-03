@@ -15,15 +15,9 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                bat 'mvn clean compile'
-            }
-        }
-
         stage('Test') {
             steps {
-                bat 'mvn test'
+                bat 'mvn --batch-mode clean test'
             }
             post {
                 always {
@@ -34,7 +28,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                bat 'mvn package -DskipTests'
+                bat 'mvn --batch-mode clean package -DskipTests'
             }
         }
 
