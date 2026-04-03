@@ -12,7 +12,7 @@ public class ShoppingCartApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/shopping-cart-view.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 720, 520);
-        stage.setTitle("Shopping Cart - Cheny");
+        stage.setTitle("Shopping Cart - CHEN Yicheng");
         stage.setScene(scene);
         stage.show();
     }

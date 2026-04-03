@@ -37,4 +37,7 @@ INSERT INTO localization_strings(`key`, value, language) VALUES
 ('calculate.total', 'Calculate total', 'en_US'),
 ('total.cost', 'Total cost:', 'en_US'),
 ('result.log', 'Calculation result', 'en_US'),
-('saved.db', 'Saved to database.', 'en_US');
+('saved.db', 'Saved to database.', 'en_US'),
+('select.language', 'Language', 'en_US'),
+('item', 'Item', 'en_US'),
+('item.count.mismatch', 'Warning: expected item count:', 'en_US');

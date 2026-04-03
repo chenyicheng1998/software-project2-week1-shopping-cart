@@ -7,6 +7,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.geometry.NodeOrientation;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -41,6 +43,8 @@ public class ShoppingCartController {
     private Label outputLabel;
     @FXML
     private TextArea outputArea;
+    @FXML
+    private VBox rootContainer;
 
     private final ShoppingCart shoppingCart = new ShoppingCart();
     private final LocalizationService localizationService = new LocalizationService();
@@ -64,8 +68,33 @@ public class ShoppingCartController {
                 loadMessages(newValue.code());
                 shoppingCart.clear();
                 outputArea.clear();
+                applyDirection(newValue.code());
             }
         });
+        applyDirection(languageCombo.getValue().code());
+    }
+
+    @FXML
+    public void handleCalculate() {
+        int expectedItems = parseExpectedItems();
+        if (expectedItems > 0 && shoppingCart.getItems().size() != expectedItems) {
+            appendOutput(getMessage("item.count.mismatch") + " " + expectedItems);
+        }
+
+        try {
+            double total = shoppingCart.calculateTotalCost();
+            appendOutput(getMessage("total.cost") + " " + String.format("%.2f", total));
+
+            LocaleOption selected = languageCombo.getValue();
+            cartService.saveCart(shoppingCart, selected != null ? selected.code() : "en_US");
+            appendOutput(getMessage("saved.db"));
+        } catch (NumberFormatException ex) {
+            appendOutput(getMessage("invalid.number"));
+        } catch (SQLException ex) {
+            appendOutput(getMessage("db.error") + " " + ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            appendOutput(ex.getMessage());
+        }
     }
 
     @FXML
@@ -88,25 +117,6 @@ public class ShoppingCartController {
             appendOutput(getMessage("invalid.number"));
         } catch (IllegalArgumentException ex) {
             appendOutput(ex.getMessage());
-        }
-    }
-
-    @FXML
-    public void handleCalculate() {
-        int expectedItems = parseExpectedItems();
-        if (expectedItems > 0 && shoppingCart.getItems().size() != expectedItems) {
-            appendOutput(getMessage("item.count.mismatch") + " " + expectedItems);
-        }
-
-        double total = shoppingCart.calculateTotalCost();
-        appendOutput(getMessage("total.cost") + " " + String.format("%.2f", total));
-
-        try {
-            LocaleOption selected = languageCombo.getValue();
-            cartService.saveCart(shoppingCart, selected != null ? selected.code() : "en_US");
-            appendOutput(getMessage("saved.db"));
-        } catch (SQLException ex) {
-            appendOutput(getMessage("db.error") + " " + ex.getMessage());
         }
     }
 
@@ -144,22 +154,16 @@ public class ShoppingCartController {
     private Map<String, String> buildMergedMessages(String languageCode, Map<String, String> dbMessages) {
         String[] parts = languageCode.split("_");
         Locale locale = parts.length == 2 ? new Locale(parts[0], parts[1]) : Locale.US;
+        ResourceBundle defaultBundle = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         ResourceBundle bundle = ResourceBundle.getBundle("MessagesBundle", locale);
 
         Map<String, String> merged = new HashMap<>();
+        for (String key : defaultBundle.keySet()) {
+            merged.put(key, defaultBundle.getString(key));
+        }
         for (String key : bundle.keySet()) {
             merged.put(key, bundle.getString(key));
         }
-        merged.put("app.title", "Shopping Cart");
-        merged.put("add.item", "Add item");
-        merged.put("calculate.total", "Calculate total");
-        merged.put("result.log", "Calculation result");
-        merged.put("item", "Item");
-        merged.put("invalid.number", "Invalid number input.");
-        merged.put("saved.db", "Saved to database.");
-        merged.put("db.error", "Database error:");
-        merged.put("item.count.mismatch", "Warning: expected item count:");
-        merged.put("select.language", "Language");
         merged.putAll(dbMessages);
         return merged;
     }
@@ -169,7 +173,7 @@ public class ShoppingCartController {
     }
 
     private void refreshUiTexts() {
-        titleLabel.setText(getMessage("app.title"));
+        titleLabel.setText(getMessage("app.title") + " - CHEN Yicheng");
         languageLabel.setText(getMessage("select.language"));
         numberOfItemsLabel.setText(getMessage("enter.num.items"));
         priceLabel.setText(getMessage("enter.price"));
@@ -180,6 +184,13 @@ public class ShoppingCartController {
         numberOfItemsField.setPromptText(getMessage("enter.num.items"));
         priceField.setPromptText(getMessage("enter.price"));
         quantityField.setPromptText(getMessage("enter.quantity"));
+    }
+
+    private void applyDirection(String languageCode) {
+        boolean isArabic = "ar_AR".equals(languageCode);
+        NodeOrientation orientation = isArabic ? NodeOrientation.RIGHT_TO_LEFT : NodeOrientation.LEFT_TO_RIGHT;
+        rootContainer.setNodeOrientation(orientation);
+        outputArea.setNodeOrientation(orientation);
     }
 
     private record LocaleOption(String label, String code) {
