@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libasound2t64 \
     fonts-noto-cjk \
     fonts-noto-color-emoji \
+    fontconfig \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files needed for GUI run
@@ -30,8 +31,12 @@ COPY --from=build /app/target ./target
 
 # UTF-8 + database defaults
 ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=C.UTF-8
 ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
 ENV DB_URL="jdbc:mariadb://host.docker.internal:3306/shopping_cart_localization?useSsl=false&restrictedAuth=mysql_native_password"
 ENV DB_USER=root
+
+RUN fc-cache -f -v
 
 ENTRYPOINT ["mvn", "-q", "javafx:run"]

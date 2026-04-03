@@ -69,9 +69,11 @@ public class ShoppingCartController {
                 shoppingCart.clear();
                 outputArea.clear();
                 applyDirection(newValue.code());
+                applyFont(newValue.code());
             }
         });
         applyDirection(languageCombo.getValue().code());
+        applyFont(languageCombo.getValue().code());
     }
 
     @FXML
@@ -191,6 +193,16 @@ public class ShoppingCartController {
         NodeOrientation orientation = isArabic ? NodeOrientation.RIGHT_TO_LEFT : NodeOrientation.LEFT_TO_RIGHT;
         rootContainer.setNodeOrientation(orientation);
         outputArea.setNodeOrientation(orientation);
+    }
+
+    private void applyFont(String languageCode) {
+        if ("ja_JP".equals(languageCode)) {
+            rootContainer.setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+            outputArea.setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+            return;
+        }
+        rootContainer.setStyle("");
+        outputArea.setStyle("");
     }
 
     private record LocaleOption(String label, String code) {
