@@ -1,10 +1,5 @@
 # Shopping Cart Localization Project (SEP2 Week 2 + OTP2 Week 3)
 
-This project contains:
-
-- Week 2 in-class assignment: JavaFX shopping cart with GUI localization
-- Week 3 OTP2 extension: database-based localization + cart persistence
-
 ## Implemented Features
 
 - JavaFX GUI application
