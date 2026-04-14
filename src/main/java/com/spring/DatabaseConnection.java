@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public final class DatabaseConnection {
     private static final String DEFAULT_URL = "jdbc:mariadb://localhost:3306/shopping_cart_localization";
     private static final String DEFAULT_USER = "root";
-    private static final String DEFAULT_PASSWORD = "root";
+    private static final String DEFAULT_PASSWORD = "";
 
     private DatabaseConnection() {
     }

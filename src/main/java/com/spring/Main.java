@@ -1,5 +1,6 @@
 package com.spring;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -12,23 +13,42 @@ import java.util.Scanner;
  */
 public class Main {
 
+    private final Scanner scanner;
+    private final PrintStream out;
+    private final ShoppingCart cart;
+
+    // Constructor for dependency injection (for testing)
+    public Main(InputStream in, PrintStream out) {
+        this.scanner = new Scanner(in, StandardCharsets.UTF_8);
+        this.out = out;
+        this.cart = new ShoppingCart();
+    }
+
+    // Default constructor for production use
+    public Main() {
+        this(System.in, System.out);
+    }
+
     public static void main(String[] args) throws Exception {
         // Set console output to UTF-8 to support non-Latin characters (e.g., Japanese)
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
-        ShoppingCart cart = new ShoppingCart();
+        Main main = new Main();
+        main.run();
+    }
 
+    public void run() {
         // Display language selection menu (always in a universal format)
-        System.out.println("Select language / Valitse kieli / Valj sprak / Gengo wo sentaku / Ikhtar allugha:");
-        System.out.println("1. English");
-        System.out.println("2. Finnish (Suomi)");
-        System.out.println("3. Swedish (Svenska)");
-        System.out.println("4. Japanese (Nihongo)");
-        System.out.println("5. Arabic (العربية)");
-        System.out.print("Enter choice (1-5): ");
+        out.println("Select language / Valitse kieli / Valj sprak / Gengo wo sentaku / Ikhtar allugha:");
+        out.println("1. English");
+        out.println("2. Finnish (Suomi)");
+        out.println("3. Swedish (Svenska)");
+        out.println("4. Japanese (Nihongo)");
+        out.println("5. Arabic (العربية)");
+        out.print("Enter choice (1-5): ");
 
         int langChoice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
 
         // Get Locale object based on user's language choice
         Locale locale = getLocale(langChoice);
@@ -37,16 +57,19 @@ public class Main {
         ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", locale);
 
         // Ask user how many items they want to purchase
-        System.out.print(messages.getString("enter.num.items") + " ");
+        out.print(messages.getString("enter.num.items") + " ");
         int numItems = scanner.nextInt();
+        scanner.nextLine(); // consume newline
 
         // Loop through each item and collect price and quantity
         for (int i = 1; i <= numItems; i++) {
-            System.out.print(messages.getString("enter.price") + " " + i + ": ");
+            out.print(messages.getString("enter.price") + " " + i + ": ");
             double price = scanner.nextDouble();
+            scanner.nextLine(); // consume newline
 
-            System.out.print(messages.getString("enter.quantity") + " " + i + ": ");
+            out.print(messages.getString("enter.quantity") + " " + i + ": ");
             int quantity = scanner.nextInt();
+            scanner.nextLine(); // consume newline
 
             // Add item to cart
             cart.addItem(price, quantity);
@@ -54,9 +77,7 @@ public class Main {
 
         // Calculate and display the total cost
         double total = cart.calculateTotalCost();
-        System.out.printf("%s %.2f%n", messages.getString("total.cost"), total);
-
-        scanner.close();
+        out.printf("%s %.2f%n", messages.getString("total.cost"), total);
     }
 
     /**
@@ -94,5 +115,10 @@ public class Main {
 
         // Create Locale object using language and country code (as shown in lecture)
         return new Locale(language, country);
+    }
+
+    // Getters for testing
+    public ShoppingCart getCart() {
+        return cart;
     }
 }
